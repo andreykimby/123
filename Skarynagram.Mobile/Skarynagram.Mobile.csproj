@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-android</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Skarynagram.Mobile</RootNamespace>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ApplicationTitle>&#x421;&#x41A;&#x410;&#x420;&#x42B;&#x41D;&#x410;&#x413;&#x420;&#x410;&#x41C; &#x41F;&#x443;&#x43B;&#x44C;&#x442;</ApplicationTitle>
+    <ApplicationId>by.skarynagram.mobile</ApplicationId>
+    <ApplicationDisplayVersion>0.3</ApplicationDisplayVersion>
+    <ApplicationVersion>3</ApplicationVersion>
+    <SupportedOSPlatformVersion>24.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#E9E0C8" />
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#E9E0C8" BaseSize="128,128" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.20" />
+  </ItemGroup>
+</Project>

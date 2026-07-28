@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
+             x:Class="DrawingTests.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            >
+            <skia:SKCanvasView x:Name="canvasView"
+                               PaintSurface="OnPaintSurface"
+                               Scale="{Binding CanvasScale}"
+                               
+                               HeightRequest="{Binding CanvasHeight}"
+                               WidthRequest="{Binding CanvasWidth}"
+                               
+                               />
+            <VerticalStackLayout>
+                <HorizontalStackLayout WidthRequest="500" Margin="10" Spacing="5">
+                    <Label Text="Scale:" />
+                    <Slider Minimum="0" Maximum="2" Value="{Binding PhotoScale}" WidthRequest="200" ValueChanged="Slider_ValueChanged" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout WidthRequest="500" Margin="10" Spacing="5">
+                    <Label Text="X:" />
+                    <Slider Minimum="0" Maximum="{Binding XMax}" Value="{Binding XPos}" WidthRequest="450" ValueChanged="Slider_ValueChanged" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout WidthRequest="500" Margin="10">
+                        <Label Text="Y:" />
+                    <Slider Minimum="0" Maximum="{Binding YMax}" Value="{Binding YPos}" WidthRequest="450" ValueChanged="Slider_ValueChanged" />
+                </HorizontalStackLayout>
+                
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <HorizontalStackLayout Spacing="5">
+                    <Label Text="BgBitmap.Width:"/>
+                    <Label Text="{Binding BgBitmap.Width}"/>
+
+                    <Label Text="BgBitmap.Height: "/>
+                    <Label Text="{Binding BgBitmap.Height}"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="5">
+                    <Label Text="FgBitmap.Width:"/>
+                    <Label Text="{Binding FgBitmap.Width}"/>
+                    <Label Text="FgBitmap.Height:"/>
+                    <Label Text="{Binding FgBitmap.Height}"/>
+
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="5">
+                    <Label Text="XMax:"/>
+                    <Label Text="{Binding XMax}"/>
+                    <Label Text="YMax:"/>
+                    <Label Text="{Binding YMax}"/>
+                    
+                </HorizontalStackLayout>
+                
+            </VerticalStackLayout>
+            <Button
+                x:Name="CounterBtn"
+                Text="Click me" 
+                SemanticProperties.Hint="Counts the number of times you click"
+                Command="{Binding SaveImageCommand}"
+                HorizontalOptions="Fill" />
+                
+                <!-- Clicked="OnCounterClicked" -->
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

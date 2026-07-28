@@ -1,0 +1,25 @@
+<svg width="456" height="456" viewBox="0 0 456 456" xmlns="http://www.w3.org/2000/svg">
+  <g fill="#1C1A16">
+    <!-- Massive oak frame of a sixteenth-century screw press. -->
+    <rect x="82" y="92" width="292" height="42" rx="8"/>
+    <rect x="102" y="126" width="42" height="222" rx="5"/>
+    <rect x="312" y="126" width="42" height="222" rx="5"/>
+    <path d="M72 342h312l-18 38H90z"/>
+    <rect x="88" y="320" width="280" height="30" rx="4"/>
+    <!-- Central wooden screw and hand bar. -->
+    <rect x="214" y="54" width="28" height="154" rx="10"/>
+    <rect x="130" y="58" width="196" height="22" rx="11"/>
+    <circle cx="130" cy="69" r="18"/>
+    <circle cx="326" cy="69" r="18"/>
+    <path d="M190 180h76l28 30H162z"/>
+    <rect x="154" y="204" width="148" height="30" rx="5"/>
+    <!-- Press bed and the printed sheet. -->
+    <rect x="130" y="286" width="196" height="24" rx="4"/>
+  </g>
+  <path d="M168 238h120v54H168z" fill="#FAF6E9" stroke="#1C1A16" stroke-width="8"/>
+  <g fill="#7A241E">
+    <rect x="188" y="251" width="80" height="7" rx="3"/>
+    <rect x="188" y="265" width="62" height="7" rx="3"/>
+    <rect x="188" y="279" width="72" height="7" rx="3"/>
+  </g>
+</svg>

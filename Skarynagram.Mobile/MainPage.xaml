@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skarynagram.Mobile.MainPage"
+             BackgroundColor="{StaticResource Paper}">
+    <ScrollView>
+        <VerticalStackLayout Padding="22,28" Spacing="18">
+            <Label Text="СКАРЫНАГРАМ"
+                   FontFamily="serif"
+                   FontSize="34"
+                   CharacterSpacing="3"
+                   HorizontalOptions="Center" />
+            <Label Text="ПУЛЬТ КІРАВАННЯ"
+                   FontSize="12"
+                   CharacterSpacing="2"
+                   TextColor="{StaticResource Red}"
+                   HorizontalOptions="Center" />
+
+            <Border Stroke="{StaticResource Ink}" StrokeThickness="2" Padding="16">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="ЗЛУЧЭННЕ" FontAttributes="Bold" FontSize="20" />
+                    <Entry x:Name="AddressEntry" Placeholder="192.168.1.10:9877" />
+                    <Entry x:Name="PinEntry" Placeholder="PIN-код" Keyboard="Numeric" IsPassword="True" />
+                    <Button Text="ЗЛУЧЫЦЦА" Clicked="Connect_Clicked" />
+                    <Label x:Name="ConnectionStatus" Text="Няма злучэння" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Stroke="{StaticResource Ink}" StrokeThickness="2" Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="СТАН ДРУКАРНІ" FontAttributes="Bold" FontSize="20" />
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="8">
+                        <Label Text="Хэштэг" /><Label x:Name="HashtagLabel" Grid.Column="1" HorizontalTextAlignment="End" />
+                        <Label Grid.Row="1" Text="Сёння" /><Label x:Name="TodayLabel" Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="End" />
+                        <Label Grid.Row="2" Text="Усяго" /><Label x:Name="TotalLabel" Grid.Row="2" Grid.Column="1" HorizontalTextAlignment="End" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Stroke="{StaticResource Ink}" StrokeThickness="2" Padding="16">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="ПРЫНТАР І ПАПЕРА" FontAttributes="Bold" FontSize="20" />
+                    <Label Text="Прынтар" />
+                    <Picker x:Name="PrinterPicker" />
+                    <Label Text="Фармат паперы" />
+                    <Picker x:Name="PaperPicker" />
+                    <Button Text="ЗАХАВАЦЬ ВЫБАР" Clicked="SavePrintOptions_Clicked" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label x:Name="ErrorLabel" TextColor="{StaticResource Red}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

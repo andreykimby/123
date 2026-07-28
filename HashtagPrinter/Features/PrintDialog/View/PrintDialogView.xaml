@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skarynagram.Features.Views.PrintDialogView"
+             xmlns:vm="clr-namespace:Skarynagram.Features.ViewModels"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="vm:PrintDialogViewModel"
+             Title="Перадпрагляд друку" BackgroundColor="Transparent">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <AbsoluteLayout BackgroundColor="#B3000000">
+            <Grid 
+                ColumnDefinitions="*, Auto" 
+                RowDefinitions="*, Auto" 
+                VerticalOptions="Fill" 
+                Padding="24"
+                Margin="55"
+                BackgroundColor="{StaticResource WoodLight}"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All">
+                <Border x:Name="tplBorder"
+                    StrokeThickness="3" 
+                        Grid.RowSpan="2" 
+                        Grid.Column="0" 
+                        Padding="0" 
+                        
+                        VerticalOptions="Fill"
+                        HorizontalOptions="Fill"
+                        BackgroundColor="{StaticResource Parchment}" 
+                        Stroke="{StaticResource Gold}"
+                        >
+                    <skia:SKCanvasView x:Name="canvasView"
+                                       Grid.Column="0" Grid.Row="2" AnchorX="0" AnchorY="0" 
+                                       PaintSurface="OnPaintSurface"
+                                       MaximumWidthRequest="{Binding CanvasWidth}"
+                                       MaximumHeightRequest="{Binding CanvasHeight}"
+                                        
+                   />
+                </Border>
+                <Border IsVisible="False" Grid.Column="1" Grid.Row="0" VerticalOptions="Center" Margin="30">
+                <VerticalStackLayout >
+                    <HorizontalStackLayout WidthRequest="500" Margin="10" Spacing="5">
+                        <Label Text="Scale:" />
+                            <Slider x:Name="ScaleSlider" Minimum="0.1" Maximum="2" Value="{Binding PhotoScale, Mode=TwoWay}" WidthRequest="200" ValueChanged="Slider_ValueChanged" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout WidthRequest="500" Margin="10" Spacing="5">
+                        <Label Text="X:" />
+                        <Slider Minimum="0" Maximum="{Binding XMax}" Value="{Binding XPos}" WidthRequest="430" ValueChanged="Slider_ValueChanged" />
+                    <Label Text="{Binding XPos}"/>
+                </HorizontalStackLayout>
+                    <HorizontalStackLayout WidthRequest="500" Margin="10">
+                        <Label Text="Y:" />
+                    <Slider Minimum="-500" Maximum="{Binding YMax}" Value="{Binding YPos}" WidthRequest="430" ValueChanged="Slider_ValueChanged" />
+                    <Label Text="{Binding YPos}"/>
+                </HorizontalStackLayout>
+                
+                </VerticalStackLayout>
+                </Border>
+                
+                
+                
+                </Grid>
+        <Border 
+            AbsoluteLayout.LayoutBounds="0.5,0.88"
+            AbsoluteLayout.LayoutFlags="XProportional,YProportional"
+            StrokeThickness="0"
+            HeightRequest="60"
+            >
+            <HorizontalStackLayout Spacing="18">
+                <Button
+                
+                x:Name="CounterBtn"
+                Text="Друкаваць" 
+                SemanticProperties.Hint="Надрукаваць выбраны макет"
+                Command="{Binding PrintImageCommand}"
+                HorizontalOptions="Fill" 
+                    Style="{StaticResource PrintButtons}"
+                    
+                    />
+                <Button
+                    Text="СКАРЫНАДРУК"
+                    Command="{Binding AddHistoryCommand}"
+                    Style="{StaticResource PrintButtons}"
+                    MinimumWidthRequest="250" />
+                <Button 
+                    Text="АДМЕНА" 
+                    Clicked="Button_Clicked" 
+                    WidthRequest="210"
+                    Style="{StaticResource PrintButtons}"
+                    />
+            </HorizontalStackLayout>
+        
+        </Border>
+        <ActivityIndicator
+            IsVisible="{Binding IsTransformingPhoto}"
+            IsRunning="{Binding IsTransformingPhoto}"
+            Color="{StaticResource Primary}"
+            WidthRequest="64"
+            HeightRequest="64"
+            AbsoluteLayout.LayoutBounds="0.5,0.5,64,64"
+            AbsoluteLayout.LayoutFlags="PositionProportional" />
+        <Label
+            Text="СТВАРАЕМ СТАРАЖЫТНЫ ВОБРАЗ…"
+            IsVisible="{Binding IsTransformingPhoto}"
+            TextColor="{StaticResource Ink}"
+            BackgroundColor="{StaticResource WoodLight}"
+            Padding="18,10"
+            FontAttributes="Bold"
+            AbsoluteLayout.LayoutBounds="0.5,0.58,AutoSize,AutoSize"
+            AbsoluteLayout.LayoutFlags="PositionProportional" />
+        <Label
+            Text="{Binding LoadError}"
+            TextColor="DarkRed"
+            FontSize="18"
+            HorizontalTextAlignment="Center"
+            MaximumWidthRequest="700"
+            AbsoluteLayout.LayoutBounds="0.5,0.5,AutoSize,AutoSize"
+            AbsoluteLayout.LayoutFlags="PositionProportional" />
+        <HorizontalStackLayout 
+            AbsoluteLayout.LayoutBounds="0.5,0.97"
+            AbsoluteLayout.LayoutFlags="XProportional,YProportional"
+            HeightRequest="52"
+            Spacing="6"
+            >
+            <Button Text="{Binding ShowSettingsTitle}" 
+                    Command="{Binding ShowSettingsCommand}"
+                    Style="{StaticResource TemplateSettingsButton}"
+                    FontSize="Small"
+                    />
+            <Entry Text="{Binding EnteredPassword, Mode=TwoWay}"
+                   FontSize="Small"
+                   IsPassword="True" 
+                   Keyboard="Numeric"
+                   IsVisible="{Binding ShowPasswordEntry}" 
+                   Placeholder="Пароль" 
+                   WidthRequest="200" 
+                   BackgroundColor="{StaticResource WoodLight}"
+                   TextColor="{StaticResource Ink}"
+                   PlaceholderColor="{StaticResource ParchmentDark}"
+                   ReturnCommand="{Binding CheckPasswordCommand}" />
+            <Button Text="ПАЦВЕРДЗІЦЬ"
+                    Command="{Binding CheckPasswordCommand}"
+                    IsVisible="{Binding ShowPasswordEntry}"
+                    MinimumWidthRequest="150" />
+            <Label Text="{Binding PasswordError}" IsVisible="{Binding ShowPasswordEntry}"
+                   TextColor="{StaticResource Primary}" VerticalOptions="Center" />
+        </HorizontalStackLayout>
+
+        <Border IsVisible="{Binding ShowPasswordEntry}"
+                AbsoluteLayout.LayoutBounds="0.5,0.68,320,440"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                Padding="18"
+                BackgroundColor="{StaticResource WoodLight}"
+                Stroke="{StaticResource Ink}"
+                StrokeThickness="2">
+            <VerticalStackLayout Spacing="12">
+                <Label Text="УВЯДЗІЦЕ ПАРОЛЬ"
+                       FontFamily="Georgia"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" />
+                <Entry Text="{Binding EnteredPassword, Mode=TwoWay}"
+                       IsPassword="True"
+                       Keyboard="Numeric"
+                       FontSize="24"
+                       HorizontalTextAlignment="Center"
+                       BackgroundColor="{StaticResource Wood}" />
+                <Grid RowDefinitions="64,64,64,64"
+                      ColumnDefinitions="*,*,*"
+                      RowSpacing="8"
+                      ColumnSpacing="8">
+                    <Button Text="1" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="1" />
+                    <Button Grid.Column="1" Text="2" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="2" />
+                    <Button Grid.Column="2" Text="3" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="3" />
+                    <Button Grid.Row="1" Text="4" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="4" />
+                    <Button Grid.Row="1" Grid.Column="1" Text="5" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="5" />
+                    <Button Grid.Row="1" Grid.Column="2" Text="6" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="6" />
+                    <Button Grid.Row="2" Text="7" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="7" />
+                    <Button Grid.Row="2" Grid.Column="1" Text="8" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="8" />
+                    <Button Grid.Row="2" Grid.Column="2" Text="9" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="9" />
+                    <Button Grid.Row="3" Text="⌫" Command="{Binding RemovePasswordDigitCommand}" />
+                    <Button Grid.Row="3" Grid.Column="1" Text="0" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="0" />
+                    <Button Grid.Row="3" Grid.Column="2" Text="✓" Command="{Binding CheckPasswordCommand}" />
+                </Grid>
+                <Label Text="{Binding PasswordError}"
+                       TextColor="{StaticResource Primary}"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+        </Border>
+
+        <Border 
+            Padding="5" 
+            IsVisible="{Binding VisibleSettings}"
+            AbsoluteLayout.LayoutBounds="0.9,0.5"
+            AbsoluteLayout.LayoutFlags="XProportional,YProportional"
+            BackgroundColor="{StaticResource WoodLight}"
+            Stroke="{StaticResource Ink}"
+                >
+            <VerticalStackLayout>
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="Водступ зверху:" VerticalOptions="Center" />
+                    <Entry Text="{Binding FgTopOffset}"/>
+                    <Stepper x:Name="StepperFgTopOffset" Value="{Binding FgTopOffset}" Maximum="100000" />
+
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="Водступ знізу:" VerticalOptions="Center" />
+                    <Entry Text="{Binding FgBottomOffset}"/>
+                    <Stepper Value="{Binding FgBottomOffset}" Maximum="100000" />
+
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="Водступ збоку:" VerticalOptions="Center" />
+                    <Entry Text="{Binding FgLeftOffset}"/>
+                    <Stepper Value="{Binding FgLeftOffset}" Maximum="100000" />
+
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+
+        <Grid IsVisible="{Binding IsPrintingConfirmation}"
+              InputTransparent="False"
+              BackgroundColor="#E6F7F4EC"
+              AbsoluteLayout.LayoutBounds="0,0,1,1"
+              AbsoluteLayout.LayoutFlags="All">
+            <Border WidthRequest="390" HeightRequest="300"
+                    Padding="28" BackgroundColor="{StaticResource WoodLight}"
+                    Stroke="{StaticResource Ink}" StrokeThickness="2"
+                    HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout Spacing="14" HorizontalOptions="Center" VerticalOptions="Center">
+                    <AbsoluteLayout WidthRequest="190" HeightRequest="125" HorizontalOptions="Center">
+                        <!-- Сілуэт драўлянага станка Скарыны -->
+                        <BoxView Color="{StaticResource Ink}" AbsoluteLayout.LayoutBounds="18,15,14,95" />
+                        <BoxView Color="{StaticResource Ink}" AbsoluteLayout.LayoutBounds="158,15,14,95" />
+                        <BoxView Color="{StaticResource Ink}" AbsoluteLayout.LayoutBounds="10,8,170,14" />
+                        <BoxView Color="{StaticResource Ink}" AbsoluteLayout.LayoutBounds="8,108,174,12" />
+                        <BoxView Color="{StaticResource ParchmentDark}" AbsoluteLayout.LayoutBounds="43,72,104,32" />
+                        <BoxView x:Name="PressPlaten" Color="{StaticResource Primary}" AbsoluteLayout.LayoutBounds="38,58,114,12" />
+                        <BoxView Color="{StaticResource Ink}" AbsoluteLayout.LayoutBounds="91,21,8,38" />
+                        <BoxView x:Name="PressHandle" AnchorX="0" AnchorY="0.5" Color="{StaticResource Ink}" AbsoluteLayout.LayoutBounds="95,29,78,7" />
+                        <Label Text="A" FontFamily="Georgia" FontAttributes="Bold" FontSize="18" TextColor="{StaticResource WoodLight}"
+                               AbsoluteLayout.LayoutBounds="86,77,AutoSize,AutoSize" />
+                    </AbsoluteLayout>
+                    <Label Text="ІДЗЕ ДРУК…" FontFamily="Georgia" FontSize="22" FontAttributes="Bold"
+                           CharacterSpacing="2" TextColor="{StaticResource Ink}" HorizontalOptions="Center" />
+                    <Label Text="Макет перададзены ў друкарню" FontSize="14"
+                           TextColor="{StaticResource ParchmentDark}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </AbsoluteLayout>
+
+</ContentPage>

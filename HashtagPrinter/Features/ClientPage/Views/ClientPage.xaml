@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skarynagram.Features.ClientPage.Views.ClientPage"
+             xmlns:vm="clr-namespace:Skarynagram.Features.ViewModels"
+             x:DataType="vm:ClientPageViewModel"
+             xmlns:views="clr-namespace:Skarynagram.Features.Views"
+             xmlns:entities="clr-namespace:Skarynagram.Features.InstaViewer.Entities"
+             xmlns:res="clr-namespace:Skarynagram.Resources.Strings"
+             xmlns:ff="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+             Title="Фотадрукарня" BackgroundColor="{StaticResource Wood}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <TapGestureRecognizer x:Key="TapOutsideRecognizer"
+                              Command="{Binding HidePrintFormCommand}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <AbsoluteLayout>
+        <Grid AbsoluteLayout.LayoutBounds="0,0,1,1" 
+              AbsoluteLayout.LayoutFlags="All" 
+              RowDefinitions="Auto,*,Auto"
+              Margin="28" RowSpacing="18">
+            <VerticalStackLayout Grid.Row="0" Spacing="7">
+                <Label Text="СКАРЫНАГРАМ" TextColor="{StaticResource ParchmentDark}" FontFamily="Georgia" CharacterSpacing="3" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" />
+
+                <Label Text="{Binding HeaderValue}" 
+                   HorizontalTextAlignment="Center" 
+                   FontAttributes="Bold" 
+                   MaxLines="1" 
+                   FontFamily="Georgia" FontSize="42" TextColor="{StaticResource Ink}"
+                   SemanticProperties.HeadingLevel="Level1" 
+                   HorizontalOptions="Center" />
+                <Label Text="{Binding DescriptionValue}" HorizontalTextAlignment="Center" MaxLines="3" FontSize="18" TextColor="{StaticResource ParchmentDark}"/>
+
+            </VerticalStackLayout>
+
+            <CollectionView x:Name="MediaCollection" 
+                            Grid.Row="1" 
+                            ItemsSource="{Binding Images}" 
+                            RemainingItemsThreshold="6"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadNextPageCommand}"
+                            ItemsUpdatingScrollMode="KeepScrollOffset"
+                            
+                            Scrolled="MediaCollection_Scrolled">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="5" VerticalItemSpacing="5"/>
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="entities:MediaElement">
+                        <Grid Padding="6" Margin="10" BackgroundColor="{StaticResource WoodLight}" RowSpacing="8">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference MediaCollection}, 
+                                   Path=BindingContext.MediaClickCommand}"
+                                   CommandParameter="{Binding .}"/>
+                            </Grid.GestureRecognizers>
+
+                            
+                            <Border BackgroundColor="{StaticResource WoodLight}" Stroke="{StaticResource Gold}" StrokeThickness="2" />
+                            
+
+                            <VerticalStackLayout Padding="10" Spacing="6">
+                                <!-- <Image  Margin="15" HeightRequest="200" WidthRequest="200" Shadow="5" Aspect="AspectFit" >
+                                    <Image.Source >
+                                        <UriImageSource  Uri="{Binding MediaUrl}"  CachingEnabled="True"  CacheValidity="7.00:00:00"/>
+                                    </Image.Source>
+                                </Image> -->
+                                <!-- <Image Source="{Binding MediaUrl}" HeightRequest="200" WidthRequest="200" Aspect="AspectFit" />  -->
+                                <ff:CachedImage Source="{Binding MediaUrl}"
+                                    Aspect="AspectFit"
+                                    HeightRequest="400"
+                                    WidthRequest="400"
+                                    DownsampleToViewSize="True"
+                                    CacheDuration="30"
+                                    RetryCount="3"
+                                    RetryDelay="500"
+                                    LoadingPlaceholder="loading.png"
+                                    ErrorPlaceholder="error.png" />
+                                <Label Text="{Binding Caption}" 
+                                   MaxLines="2" 
+                                   LineBreakMode="TailTruncation"
+                                   HorizontalTextAlignment="Center"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Ink}"/>
+
+                                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                                    <HorizontalStackLayout HorizontalOptions="Center">
+                                        <Label Text="Упадабанні: " TextColor="{StaticResource ParchmentDark}"/>
+                                        <Label Text="{Binding LikeCount}" TextColor="{StaticResource Ink}"/>
+                                    </HorizontalStackLayout>
+    
+                                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                                        <Label Text="Час: " TextColor="{StaticResource ParchmentDark}"/>
+                                        <Label Text="{Binding Timestamp, StringFormat='{0:dd.MM HH:mm:ss}'}" TextColor="{StaticResource Ink}"/>
+                                    </HorizontalStackLayout>
+                                    
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+            <HorizontalStackLayout Grid.Row="2" Spacing="10" >
+                <Button Text="ЗАГРУЗІЦЬ" IsVisible="True" Command="{Binding LoadImagesCommand}"/>
+                <Button Text="АБНАВІЦЬ" IsEnabled="{Binding RefreshIsEnabled}" Command="{Binding RefreshRecentMediaCommand}"/>
+                <HorizontalStackLayout Spacing="6">
+                    <Button Text="ЗАЧЫНІЦЬ ЭКРАН" Command="{Binding CloseCommand}" IsVisible="{Binding HideClosingBtn}" />
+                </HorizontalStackLayout>
+                <Button x:Name="buttonMin" IsVisible="False" Text="АДНАВІЦЬ АКНО" Clicked="WindowRestore" />
+                <Button x:Name="buttonMax" Text="НА ЎВЕСЬ ЭКРАН" Clicked="WindowMaximize" />
+                <Label Text="Загружана выяў:" VerticalOptions="Center"/>
+                <Label Text="{Binding Images.Count}" VerticalOptions="Center"/>
+
+
+            </HorizontalStackLayout>
+            
+
+        </Grid>
+
+        <Border IsVisible="{Binding IsClosing}"
+                AbsoluteLayout.LayoutBounds="0.5,0.5,430,620"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                BackgroundColor="{StaticResource WoodLight}"
+                Stroke="{StaticResource Ink}"
+                StrokeThickness="3"
+                StrokeShape="RoundRectangle 18"
+                Padding="30"
+                ZIndex="20">
+            <VerticalStackLayout Spacing="18">
+                <Label Text="УВЯДЗІЦЕ ПАРОЛЬ"
+                       FontFamily="Georgia"
+                       FontSize="26"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center"
+                       TextColor="{StaticResource Ink}" />
+                <Entry Text="{Binding EnteredPassword, Mode=TwoWay}"
+                       IsPassword="True"
+                       Keyboard="Numeric"
+                       IsReadOnly="True"
+                       FontSize="28"
+                       HeightRequest="60"
+                       HorizontalTextAlignment="Center"
+                       Placeholder="••••"
+                       ReturnCommand="{Binding CheckPasswordCommand}" />
+                <Grid RowDefinitions="70,70,70,70"
+                      ColumnDefinitions="*,*,*"
+                      RowSpacing="10"
+                      ColumnSpacing="10">
+                    <Button Text="1" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="1" />
+                    <Button Grid.Column="1" Text="2" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="2" />
+                    <Button Grid.Column="2" Text="3" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="3" />
+                    <Button Grid.Row="1" Text="4" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="4" />
+                    <Button Grid.Row="1" Grid.Column="1" Text="5" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="5" />
+                    <Button Grid.Row="1" Grid.Column="2" Text="6" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="6" />
+                    <Button Grid.Row="2" Text="7" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="7" />
+                    <Button Grid.Row="2" Grid.Column="1" Text="8" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="8" />
+                    <Button Grid.Row="2" Grid.Column="2" Text="9" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="9" />
+                    <Button Grid.Row="3" Text="⌫" Command="{Binding RemovePasswordDigitCommand}" />
+                    <Button Grid.Row="3" Grid.Column="1" Text="0" Command="{Binding AppendPasswordDigitCommand}" CommandParameter="0" />
+                    <Button Grid.Row="3" Grid.Column="2" Text="✓" Command="{Binding CheckPasswordCommand}" />
+                </Grid>
+                <Label Text="{Binding PasswordError}"
+                       TextColor="{StaticResource Primary}"
+                       HorizontalTextAlignment="Center"
+                       FontAttributes="Bold" />
+                <Button Text="СКАСАВАЦЬ" Command="{Binding CloseCommand}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <VerticalStackLayout>
+            
+            <BoxView 
+    IsVisible="{Binding IsBusy}" 
+    BackgroundColor="Black" 
+    Opacity="0.3"
+    AbsoluteLayout.LayoutBounds="0,0,1,1"
+    AbsoluteLayout.LayoutFlags="All" />
+        </VerticalStackLayout>
+
+        <ActivityIndicator 
+            AbsoluteLayout.LayoutBounds="0.5,0.5,AutoSize,AutoSize" 
+            AbsoluteLayout.LayoutFlags="PositionProportional" 
+            IsRunning="{Binding IsBusy}" VerticalOptions="Center" 
+            HorizontalOptions="Center" IsVisible="{Binding IsBusy}" />
+        <!-- <Frame IsVisible="False" BindingContext="{Binding Source=AppUsage}" BackgroundColor="Black" Padding="10" Opacity=".7"
+           AbsoluteLayout.LayoutBounds="0.9,0.01,150,AutoSize"
+           AbsoluteLayout.LayoutFlags="PositionProportional">
+            <VerticalStackLayout>
+                <HorizontalStackLayout Spacing="5">
+                    <Label Text="CallCount: " TextColor="White"/>
+                    <Label Text="{Binding CallCount}" TextColor="White"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="5">
+                    <Label Text="TotalCputime: " TextColor="White"/>
+                    <Label Text="{Binding TotalCputime}" TextColor="White"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="5">
+                    <Label Text="TotalTime: " TextColor="White"/>
+                    <Label Text="{Binding TotalTime}" TextColor="White"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="5">
+                    <Label Text="Media page:" TextColor="White"/>
+                    <Label Text="{Binding MediaPage}" TextColor="White"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout> 
+        </Frame> -->
+
+        <Border 
+            AbsoluteLayout.LayoutBounds="0.5,0.9, AutoSize, AutoSize"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            BackgroundColor="#80000000"
+            StrokeShape="RoundRectangle 20"
+            Padding="8">
+        <Label Text="↓  ГАРТАЙЦЕ НІЖЭЙ  ↓" 
+               
+           TextColor="White" 
+           VerticalOptions="End" 
+           FontSize="Medium"
+           FontAttributes="Bold"
+           HorizontalTextAlignment="Center"
+           x:Name="ScrollHintLabel" />
+            
+        </Border>
+
+
+    </AbsoluteLayout>
+    
+    
+</ContentPage>

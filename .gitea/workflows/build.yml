@@ -1,0 +1,24 @@
+name: Build MAUI for Windows
+on: 
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: windows-10  # Ваш раннер на Ubuntu 24
+    steps:
+    # - name: Setup Node
+    #   run: powershell -c "irm https://community.chocolatey.org/install.ps1|iex" && choco install nodejs --version="24.11.1"
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'  # Или 9.0.x
+    - name: Install MAUI Workload
+      run: dotnet workload install maui-windows --source https://api.nuget.org/v3/index.json
+    - name: Build for Windows
+      run: cd HashtagPrinter && dotnet publish -c Release -f net9.0-windows10.0.19041.0 -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true -o ./publish
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: windows-app
+        path: ./HashtagPrinter/publish

@@ -1,0 +1,46 @@
+name: Build and Release Artifact
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-10  # Ваш раннер на Ubuntu 24
+    steps:
+    - uses: actions/checkout@v4
+    # - name: Setup .NET
+    #   uses: actions/setup-dotnet@v4
+    #   with:
+    #     dotnet-version: '10.0.x'  # Или 9.0.x
+    # - name: Install MAUI Workload
+    #   run: dotnet workload install maui-windows --source https://api.nuget.org/v3/index.json
+    - name: Build for Windows
+      run: |
+        cd HashtagPrinter
+        dotnet restore
+        dotnet publish -c Release -f net10.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win-x64 -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true -p:IncludeNativeLibrariesForSelfExtract=true -o ./publish
+      shell: pwsh
+    - name: Generate version and rename artifact
+      id: versioning
+      shell: pwsh
+      run: |
+        $VERSION=$Env:GITHUB_REF_NAME  # Использует имя тега, например v1.0.0
+        $artifact_name = "HashtagPrinter-$VERSION"
+        $artifact_zip = "HashtagPrinter-$VERSION.zip"
+        Compress-Archive -Path ./HashtagPrinter/publish/* -DestinationPath "$artifact_zip"
+        echo "artifact_name=$artifact_name"  | Out-File -FilePath $Env:GITHUB_OUTPUT -Append -Encoding utf8
+        echo "artifact_zip=$artifact_zip"  | Out-File -FilePath $Env:GITHUB_OUTPUT -Append -Encoding utf8
+        Get-Content $Env:GITHUB_OUTPUT
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ steps.versioning.outputs.artifact_name }}
+        path: ${{ steps.versioning.outputs.artifact_zip }}
+    - name: Create Release
+      uses: https://gitea.com/actions/gitea-release-action@v1
+      with:
+        token: ${{ secrets.TKN }}
+        tag_name: ${{ github.ref_name }}
+        files: ${{ steps.versioning.outputs.artifact_zip }}

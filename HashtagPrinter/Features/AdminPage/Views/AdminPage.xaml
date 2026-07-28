@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Skarynagram.Features.AdminPage.ViewModels"
+             xmlns:utils="clr-namespace:Skarynagram.Utils"
+             x:Class="Skarynagram.Features.AdminPage.Views.AdminPage"
+             x:DataType="vm:AdminPageViewModel"
+             Title="СКАРЫНАГРАМ — Налады" BackgroundColor="{StaticResource Wood}">
+    <ScrollView>
+        <VerticalStackLayout Padding="32,24,32,48" Spacing="18" MaximumWidthRequest="980" HorizontalOptions="Center">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                <Label Text="СКАРЫНАГРАМ" Style="{StaticResource Headline}" FontSize="40" CharacterSpacing="3" />
+                <Border Grid.Column="1" Padding="14,7" Stroke="{StaticResource Ink}" StrokeThickness="1"
+                        BackgroundColor="{StaticResource Ink}" VerticalOptions="Center">
+                    <Label Text="{Binding ApplicationVersion}" TextColor="{StaticResource PrimaryDarkText}"
+                           FontSize="13" FontAttributes="Bold" />
+                </Border>
+            </Grid>
+            <Label Text="Беларуская фотадрукарня · Панэль кіравання" Style="{StaticResource SubHeadline}" FontSize="15" />
+
+            <Border Padding="24" BackgroundColor="{StaticResource WoodLight}" StrokeThickness="2">
+                <VerticalStackLayout Spacing="14">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Text="I" TextColor="{StaticResource Primary}" FontFamily="Georgia" FontSize="26" FontAttributes="Bold" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="0">
+                            <Label Text="INSTAGRAM" TextColor="{StaticResource Ink}" FontFamily="Georgia" FontSize="20" FontAttributes="Bold" />
+                            <Label Text="Злучэнне і аўтарызацыя" TextColor="{StaticResource ParchmentDark}" FontSize="13" />
+                        </VerticalStackLayout>
+                    </Grid>
+                    <BoxView HeightRequest="1" BackgroundColor="{StaticResource Ink}" />
+                    <Grid ColumnDefinitions="210,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="10" ColumnSpacing="16">
+                        <Label Text="Ідэнтыфікатар праграмы" Style="{StaticResource SettingsGridLabels}"/><Entry Grid.Column="1" Text="{Binding AppId}" />
+                        <Label Grid.Row="1" Text="Хэштэг" Style="{StaticResource SettingsGridLabels}"/><Entry Grid.Row="1" Grid.Column="1" Text="{Binding SelectedHashtag}" Placeholder="Напрыклад: biblebelarus (без #)" />
+                        <Label Grid.Row="2" Text="Адрас перанакіравання" Style="{StaticResource SettingsGridLabels}"/><Entry Grid.Row="2" Grid.Column="1" Text="{Binding RedirectUrl}" IsReadOnly="True" />
+                        <Label Grid.Row="3" Text="Сакрэт праграмы" Style="{StaticResource SettingsGridLabels}"/><Entry Grid.Row="3" Grid.Column="1" Text="{Binding AppSecret}" IsPassword="True" />
+                        <Label Grid.Row="4" Text="Затрымка паміж запытамі" Style="{StaticResource SettingsGridLabels}"/>
+                        <Entry Grid.Row="4" Grid.Column="1" Text="{Binding InstaViewerRequestDelay}"><Entry.Behaviors><utils:NumericEntryBehavior /></Entry.Behaviors></Entry>
+                    </Grid>
+                    <Button Text="АЎТАРЫЗАВАЦЦА" Command="{Binding OpenAuthUrlCommand}" HorizontalOptions="End" MinimumWidthRequest="240" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Padding="24" BackgroundColor="{StaticResource WoodLight}" StrokeThickness="2">
+                <VerticalStackLayout Spacing="14">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Text="II" TextColor="{StaticResource Primary}" FontFamily="Georgia" FontSize="26" FontAttributes="Bold" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="0">
+                            <Label Text="ВЫГЛЯД І ДРУК" TextColor="{StaticResource Ink}" FontFamily="Georgia" FontSize="20" FontAttributes="Bold" />
+                            <Label Text="Макет і параметры друку" TextColor="{StaticResource ParchmentDark}" FontSize="13" />
+                        </VerticalStackLayout>
+                    </Grid>
+                    <BoxView HeightRequest="1" BackgroundColor="{StaticResource Ink}" />
+                    <Grid ColumnDefinitions="210,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="10" ColumnSpacing="16">
+                        <Label Text="Загаловак вакна кліента" Style="{StaticResource SettingsGridLabels}"/><Entry Grid.Column="1" Text="{Binding HeaderValue}" />
+                        <Label Grid.Row="1" Text="Апісанне" Style="{StaticResource SettingsGridLabels}"/><Entry Grid.Row="1" Grid.Column="1" Text="{Binding DescriptionValue}" />
+                        <Label Grid.Row="2" Text="Макет друку" Style="{StaticResource SettingsGridLabels}"/><Button Grid.Row="2" Grid.Column="1" Text="НАЛАДЗІЦЬ ФОТА" Command="{Binding OpenTemplateEditorCommand}" />
+                        <Label Grid.Row="3" Text="Пароль кліенцкага акна" Style="{StaticResource SettingsGridLabels}"/><Entry Grid.Row="3" Grid.Column="1" Text="{Binding ClientPassword}" IsPassword="True" />
+                        <Label Grid.Row="4" Text="Колькасць копій" Style="{StaticResource SettingsGridLabels}"/><Entry Grid.Row="4" Grid.Column="1" Text="{Binding PSPrintSettings.Copies}" />
+                        <Label Grid.Row="5" Text="Ключ OpenAI API" Style="{StaticResource SettingsGridLabels}"/>
+                        <Entry Grid.Row="5" Grid.Column="1" Text="{Binding OpenAiApiKey}" IsPassword="True"
+                               Placeholder="sk-… для функцыі «СКАРЫНАДРУК»" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Padding="20" BackgroundColor="{StaticResource WoodLight}" StrokeThickness="2">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="СТАТЫСТЫКА ДРУКУ" TextColor="{StaticResource Ink}" FontFamily="Georgia" FontSize="20" FontAttributes="Bold" />
+                    <BoxView HeightRequest="1" BackgroundColor="{StaticResource Ink}" />
+                    <Grid ColumnDefinitions="*,1,*,1,*" RowDefinitions="Auto,Auto"
+                          ColumnSpacing="12" RowSpacing="6">
+                        <Label Grid.Column="0" Text="ДАТА" Style="{StaticResource SettingsGridLabels}"
+                               HorizontalTextAlignment="Center" />
+                        <Label Grid.Column="2" Text="СЁННЯ" Style="{StaticResource SettingsGridLabels}"
+                               HorizontalTextAlignment="Center" />
+                        <Label Grid.Column="4" Text="УСЯГО" Style="{StaticResource SettingsGridLabels}"
+                               HorizontalTextAlignment="Center" />
+
+                        <BoxView Grid.Column="1" Grid.RowSpan="2" WidthRequest="1"
+                                 BackgroundColor="{StaticResource ParchmentDark}" />
+                        <BoxView Grid.Column="3" Grid.RowSpan="2" WidthRequest="1"
+                                 BackgroundColor="{StaticResource ParchmentDark}" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="{Binding PrintStatisticsDay}"
+                               FontSize="22" HorizontalTextAlignment="Center" />
+                        <Label Grid.Row="1" Grid.Column="2" Text="{Binding PrintedToday}"
+                               FontSize="22" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                        <Label Grid.Row="1" Grid.Column="4" Text="{Binding PrintedTotal}"
+                               FontSize="22" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Label Text="Табліца:" FontSize="12" FontAttributes="Bold"
+                               TextColor="{StaticResource ParchmentDark}" />
+                        <Label Grid.Column="1" Text="{Binding PrintStatisticsFilePath}"
+                               FontSize="12" TextColor="{StaticResource ParchmentDark}"
+                               LineBreakMode="TailTruncation" MaxLines="2" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Padding="20" BackgroundColor="{StaticResource WoodLight}" StrokeThickness="2">
+                <Grid ColumnDefinitions="180,*,Auto" ColumnSpacing="14">
+                    <Label Text="Акаўнт Instagram" FontAttributes="Bold" VerticalOptions="Center" />
+                    <Picker Grid.Column="1" ItemsSource="{Binding Accounts}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedAccount, Mode=TwoWay}" />
+                    <Button Grid.Column="2" Text="↻  АБНАВІЦЬ" Command="{Binding ReloadaccountsListCommand}" />
+                </Grid>
+            </Border>
+            <HorizontalStackLayout HorizontalOptions="End" Spacing="12">
+                <Button Text="ЗАХАВАЦЬ КОПІЮ НАЛАД" Command="{Binding ExportSettingsCommand}" />
+                <Button Text="АДНАВІЦЬ НАЛАДЫ" Command="{Binding ImportSettingsCommand}" />
+                <Button Text="ЗАХАВАЦЬ НАЛАДЫ" Command="{Binding SaveSettingsCommand}" />
+                <Button Text="АДКРЫЦЬ КЛІЕНЦКАЕ АКНО" Command="{Binding OpenClientWindowCommand}" />
+            </HorizontalStackLayout>
+            <Label Text="❦  ФРАНЦЫСК СКАРЫНА · ПОЛАЦАК  ❦" TextColor="{StaticResource ParchmentDark}" FontFamily="Georgia" FontSize="13" HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

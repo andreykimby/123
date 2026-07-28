@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skarynagram.Mobile.App">
+    <Application.Resources>
+        <Color x:Key="Paper">#F0E9D9</Color>
+        <Color x:Key="Ink">#171713</Color>
+        <Color x:Key="Red">#7A241D</Color>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource Ink}" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource Ink}" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="2" />
+            <Setter Property="HeightRequest" Value="52" />
+        </Style>
+        <Style TargetType="Entry">
+            <Setter Property="TextColor" Value="{StaticResource Ink}" />
+            <Setter Property="BackgroundColor" Value="#FAF7EF" />
+        </Style>
+    </Application.Resources>
+</Application>

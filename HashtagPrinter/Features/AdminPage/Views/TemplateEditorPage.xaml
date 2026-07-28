@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
+             x:Class="Skarynagram.Features.AdminPage.Views.TemplateEditorPage"
+             Title="Наладжванне макета" BackgroundColor="{StaticResource Wood}">
+    <Grid Padding="20" RowDefinitions="Auto,*,Auto,Auto" RowSpacing="12">
+        <VerticalStackLayout Spacing="8">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Прынтар:" TextColor="{StaticResource ParchmentDark}" VerticalOptions="Center" />
+                <Picker x:Name="PrinterPicker" WidthRequest="330" SelectedIndexChanged="PrinterPicker_SelectedIndexChanged" />
+                <Button Text="НАЛАДЫ ПРЫНТАРА" Clicked="OpenPrinterSettings_Clicked" />
+                <Label Text="Фармат паперы:" TextColor="{StaticResource ParchmentDark}" VerticalOptions="Center" />
+                <Picker x:Name="PaperPicker" WidthRequest="220" ItemDisplayBinding="{Binding PaperName}" SelectedIndexChanged="PaperPicker_SelectedIndexChanged" />
+                <Label x:Name="SelectedPaperInfo" TextColor="{StaticResource Primary}" FontAttributes="Bold" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="12">
+                <Button Text="АБРАЦЬ ШАБЛОН" Clicked="ChooseTemplate_Clicked" />
+                <Button Text="БЕЛЫ ФОН" Clicked="ClearTemplate_Clicked" />
+                <Label x:Name="TemplatePathLabel" TextColor="White" VerticalOptions="Center" LineBreakMode="MiddleTruncation" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+        <Grid x:Name="PreviewHost" Grid.Row="1" BackgroundColor="{StaticResource WoodLight}" SizeChanged="PreviewHost_SizeChanged">
+            <AbsoluteLayout x:Name="PreviewArea" BackgroundColor="White" HorizontalOptions="Center" VerticalOptions="Center" SizeChanged="PreviewArea_SizeChanged">
+                <skia:SKCanvasView x:Name="LayoutCanvas" PaintSurface="LayoutCanvas_PaintSurface" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" />
+                <Border x:Name="PhotoFrame" Stroke="Transparent" StrokeThickness="0" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers><PanGestureRecognizer PanUpdated="PhotoFrame_PanUpdated" /></Border.GestureRecognizers>
+                    <Label Text="Фота Instagram" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+            </AbsoluteLayout>
+        </Grid>
+
+        <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnSpacing="8">
+            <Button Grid.Column="0" Text="←" Clicked="MoveLeft_Clicked" />
+            <Button Grid.Column="1" Text="→" Clicked="MoveRight_Clicked" />
+            <Button Grid.Column="2" Text="↑" Clicked="MoveUp_Clicked" />
+            <Button Grid.Column="3" Text="↓" Clicked="MoveDown_Clicked" />
+            <Button Grid.Column="4" Text="− ПАМЕР" Clicked="SizeDown_Clicked" />
+            <Button Grid.Column="5" Text="+ ПАМЕР" Clicked="SizeUp_Clicked" />
+            <Button x:Name="OrientationButton" Grid.Column="6" Text="ЗМЯНІЦЬ АРЫЕНТАЦЫЮ" Clicked="Orientation_Clicked" />
+            <Button Grid.Column="8" Text="ДАДАЦЬ ТЭКСТ" Clicked="AddText_Clicked" />
+        </Grid>
+
+        <Grid Grid.Row="3" ColumnDefinitions="2*,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="6">
+            <Entry x:Name="TextEntry" Grid.Column="0" Placeholder="Абярыце або дадайце тэкст" TextChanged="TextEntry_TextChanged" />
+            <Picker x:Name="FontPicker" Grid.Column="1" WidthRequest="150" SelectedIndexChanged="FontPicker_SelectedIndexChanged">
+                <Picker.Items><x:String>OpenSansRegular</x:String><x:String>Georgia</x:String><x:String>Times New Roman</x:String><x:String>Courier New</x:String></Picker.Items>
+            </Picker>
+            <Button Grid.Column="2" Text="A−" Clicked="TextSizeDown_Clicked" />
+            <Button Grid.Column="3" Text="A+" Clicked="TextSizeUp_Clicked" />
+            <Button Grid.Column="4" Text="←" Clicked="TextLeft_Clicked" />
+            <Button Grid.Column="5" Text="→" Clicked="TextRight_Clicked" />
+            <Button Grid.Column="6" Text="↑" Clicked="TextUp_Clicked" />
+            <Button Grid.Column="7" Text="↓" Clicked="TextDown_Clicked" />
+            <Button Grid.Column="8" Text="ВЫДАЛІЦЬ ТЭКСТ" Clicked="DeleteText_Clicked" />
+            <HorizontalStackLayout Grid.Column="9" Spacing="6">
+                <Button Text="ЗАХАВАЦЬ" Clicked="Save_Clicked" />
+                <Button Text="СКАСАВАЦЬ" Clicked="Cancel_Clicked" />
+            </HorizontalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

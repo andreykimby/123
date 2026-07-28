@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="3.119.1" />
+    <Compile Include="..\HashtagPrinter\Features\InstaViewer\Services\MediaSelection.cs" Link="Production\MediaSelection.cs" />
+    <Compile Include="..\HashtagPrinter\Features\AppSettingsService\Services\LayoutGeometry.cs" Link="Production\LayoutGeometry.cs" />
+    <Compile Include="..\HashtagPrinter\Features\PrintService\Service\PrintGeometry.cs" Link="Production\PrintGeometry.cs" />
+    <Compile Include="..\HashtagPrinter\Features\AppSettingsService\Services\DataMigrationCore.cs" Link="Production\DataMigrationCore.cs" />
+    <Compile Include="..\HashtagPrinter\Features\PrintStatistics\PrintStatisticsService.cs" Link="Production\PrintStatisticsService.cs" />
+    <Compile Include="..\HashtagPrinter\Features\ImageTransformation\HistoricalImageService.cs" Link="Production\HistoricalImageService.cs" />
+  </ItemGroup>
+</Project>
